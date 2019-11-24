@@ -44,7 +44,7 @@ else:
     ext_modules = []
 
 setup(
-    name="black",
+    name="axblack",
     version = "191128",
     description="The uncompromising code formatter.",
     long_description=get_long_description(),
@@ -52,7 +52,7 @@ setup(
     keywords="automation formatter yapf autopep8 pyfmt gofmt rustfmt",
     author="Łukasz Langa",
     author_email="lukasz@langa.pl",
-    url="https://github.com/psf/black",
+    url="https://github.com/axiros/axblack",
     license="MIT",
     py_modules=["black", "blackd", "_black_version"],
     ext_modules=ext_modules,
