@@ -39,7 +39,18 @@ def foo():
     m = {'a': 'b'}
 ```
 
+Note that we wanted to keep the offset minimal and not deviate more than necessary.
+Therefore via the vim plugin and also the blackd server you do not have the option to
+set double quotes - you have to use the `--double-quotes` command line flag as
+only way to get them.  
+Should you prefer them for private projects or find them in project policies, by any means, use the
+official black version then.
+
 <details><summary>Changelog</summary>
+
+[2019-11-24 11:21]  
+- Set single_quotes as default in black.py `class File`, so that it works also
+  in vim.
 
 [2019-11-24 11:21]  
 - Recreated repo as direct fork of psf/black, with adapted master branch for
