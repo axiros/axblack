@@ -46,9 +46,6 @@ else:
 setup(
     name="black",
     version = "191128",
-    use_scm_version={
-        "write_to_template": 'version = "{version}"\n',
-    },
     description="The uncompromising code formatter.",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
