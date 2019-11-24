@@ -45,8 +45,8 @@ else:
 
 setup(
     name="black",
+    version = "191128"
     use_scm_version={
-        "write_to": "_black_version.py",
         "write_to_template": 'version = "{version}"\n',
     },
     description="The uncompromising code formatter.",
