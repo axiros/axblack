@@ -80,6 +80,7 @@ read_project_settings
 
 # black arguments:
 BLACK='black'
+BLACKD='blackd'
 # env over (now loaded) config over defaults:
 formatter_black_mode="${FORMATTER_BLACK_MOD:-${formatter_black_mode:-fast}}"
 formatter_black_line_len="${FORMATTER_BLACK_LINE_LEN:-${formatter_black_line_len:-88}}"
@@ -132,7 +133,7 @@ OPTIONS
 
 -h: Help
 -2: Formats to python2 (default $formatter_black_target_version)
--b: Supply black executable, incl arguments for it
+-b: Supply black or blackd executable, incl arguments for it
 -c: Client mode, using the server (faster)
     Default: Invokation of $DIR/black for any file
 -d: Dry mode - just print command line args of black after config and env parsing
@@ -227,6 +228,7 @@ function parse_cli {
                 ;;
             b)
                 BLACK="$OPTARG"
+                BLACKD="$OPTARG" # maybe we are in mode serve
                 ;;
             n)
                 SH_CFG_NAME="$OPTARG"
@@ -285,7 +287,7 @@ function parse_cli {
 
 function start_server {
     $serve || return 0
-    "$DIR/blackd" --bind-port $PORT
+    $BLACKD --bind-port $PORT
     exit $?
 }
 
@@ -334,7 +336,6 @@ function format_file {
         $dry_mode && {
             echo "Dry Mode - setting file from $fn to /dev/null"
             fn="/dev/null"
-            cmt="# was: $fn"
             set -x
         }
         $BLACK \
