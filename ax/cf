@@ -1,0 +1,428 @@
+#!/usr/bin/env bash
+
+# A wrapper for black, which supports environ config and nestable config files plus 
+# client server mode
+# Date: 2019-11-22 13:48]
+# Author: gunther klessinger
+set -eu
+set -o pipefail
+
+function abs  { ( cd "$1" || exit 1; pwd; ); }
+function absd { abs "$(dirname "$0")"; }
+
+PORT=46782
+# Our dir:
+DIR="$(absd "$0")"
+# Working dir:
+D="$(pwd)"
+# Working file:
+FN=
+# Repo Toplevel Dir:
+DT=
+# Name of config files to look for - or supply via -n switch:
+SH_CFG_NAME="${CFG_NAME:-config.repo}"
+
+config_files=("")
+# ------------------------------------------------------------------------ Output Setup
+function set_colors {
+    local c; c="\e[1;38;5;"
+    R="${R:-"${c}124m"}"
+    I="${I:-"${c}87m"}"
+    M="${M:-"${c}62m"}"
+    O="\e[0m"
+}
+set_colors
+
+function die {
+    echo -e "${R}ERR$O $*"
+    exit 1
+}
+# ------------------------------------------------------------------------ Config Setup
+function set_working_file_or_dir {
+    # get last argument:
+    while [[ -n "${1:-}" ]]; do
+        test "$1" == "-n" && {
+            SH_CFG_NAME="${2?"Usage: -n <name of config>"}"
+            shift 2; continue
+        }
+        FN="$1"
+        shift
+    done
+    test -f "$FN" && { D="$(absd "$FN")"; return 0; }
+    test -d "$FN" && D="$(abs "$FN")"
+    FN=
+}
+set_working_file_or_dir "$@"
+
+function read_project_settings {
+    # going up, reading any config.repo file until .git
+    local f d; d="$D"
+    while true; do
+        f="$d/${SH_CFG_NAME}"
+        test -f "$f" && config_files=("$f" "${config_files[@]}")
+        test -d "$d/.git" && { DT="$d"; break; }
+        test "$d" == "/"  && break
+        d="$(cd "$d/.." || exit 1; pwd; )"
+    done
+    for f in "${config_files[@]}"
+    do
+        test -e "$f" || continue
+        echo -e "Sourcing $M$f$O"
+        source "$f" || die "config error"
+        set +a
+    done
+}
+
+read_project_settings
+
+# --------------------------------------------------------------------------- Variables
+# echo "dt $DT"; echo "fn $FN"; echo "d $D"
+
+# black arguments:
+BLACK='black'
+# env over (now loaded) config over defaults:
+formatter_black_mode="${FORMATTER_BLACK_MOD:-${formatter_black_mode:-fast}}"
+formatter_black_line_len="${FORMATTER_BLACK_LINE_LEN:-${formatter_black_line_len:-88}}"
+formatter_black_target_version="${FORMATTER_BLACK_TARGET_VERSION:-${formatter_black_target_version:-py36}}"
+
+# for -h:
+cur_exampl_config="
+    formatter_black_mode=$formatter_black_mode
+    formatter_black_line_len=$formatter_black_line_len
+    formatter_black_target_version='$formatter_black_target_version'
+    # see also: black --help
+"
+if [ -n "${config_files[0]}" ]
+then
+    cur_exampl_config="Scanned\n${config_files[*]}\n$cur_exampl_config"
+fi
+# are we are server?
+serve=false
+# should we only ping the server?
+ping=false
+# are we using the server?
+client=false
+# here we store our skipped files:
+fn_skips="$HOME/.config/bf_skiplist"
+# exit 1 or add a broken file to the list first:
+add_skips=false
+# will be a tmpdir for intermediate work
+d_scratch=
+# only scan changed files (works only for git) or whole dirs?
+git_changed_only=false
+# when we are deep in a repo, -t puts us up to its root before scanning - save typing:
+toplevel=false
+# the name of this program 
+me="$(basename "$0")"
+# Dont run just print args:
+dry_mode=false
+git_ch1="git diff --name-only --diff-filter=ACM --cached"
+git_ch2="git diff --name-only --diff-filter=ACM"
+
+
+# Now we can build the docstring with actual values:
+doc="Code Formatter. Wraps black (formats python files).
+
+USAGE
+
+$me [OPTIONS] <FILE|DIR|ping>
+$me serve # Starts a server for better formatting performance
+
+OPTIONS
+
+-h: Help
+-2: Formats to python2 (default $formatter_black_target_version)
+-b: Supply black executable, incl arguments for it
+-c: Client mode, using the server (faster)
+    Default: Invokation of $DIR/black for any file
+-d: Dry mode - just print command line args of black after config and env parsing
+-g: When running over a directory, just take into account [changed files][1]
+    Applies only when you supply a directory argument
+-l: Line Length (default: $formatter_black_line_len)
+-m: Set black mode (default: $formatter_black_mode)
+-n: Name of (shell sourcable) config files ($SH_CFG_NAME)
+-t: When giving a dir within a git repo as argument (e.g. '.')
+    then replace with the toplevel (root) of the repo
+    => i.e. \`$me -t .\` always formats the whole repo.
+-S: Add failing file to skiplist ($fn_skips)
+-C: Clear the skiplist before the run
+
+ARGUMENTS
+
+FILE     : Formats this python file
+DIR      : Formats a whole directory, recursively
+ping     : Sends a hello world to the server (requires -c)
+
+CONFIG
+
+Besides CLI we do understand project settings and environ.
+CLI > environ > ${SH_CFG_NAME} > defaults (where default may be from pyproject.toml)
+> All keys from environ must be all uppercase!
+
+Config Files
+All(!) \"${SH_CFG_NAME}\" files, from directory of target file or dir up to repo root.
+Via the -n switch you may supply the name of those files.
+If your config should live outside of the file tree, then please use pyproject.toml format
+via \`-b\`.
+
+
+Config Variables
+See example file:
+
+Config File Example
+
+$cur_exampl_config
+
+> Use -d to print out the actual values used if you have doubts.
+
+DETAILS:
+
+- 'Changed files':
+Only possible when working in git repos.
+They are derived via
+
+    $git_ch2
+    $git_ch1
+
+- Example repo pre-commit hooks you find [here](./bin/hooks)
+
+EXAMPLES
+
+# Formats all changed files (git) within current directory and deeper
+$me -g
+# Same for the whole repo
+$me -gt
+# Same for a given directory of file
+$me -gt <dir|file>
+# Start server
+$me serve
+# Test server
+$me ping
+# Use server to format complete git repo:
+$me -ct
+# Supply args for black - note that some cli args are set by $me - use -d to see:
+$me -b "`which black` --config /tmp/pyproject.toml --diff"  myfile.py
+
+"
+
+function usage {
+    echo -e "$doc"
+    exit ${1:-0}
+}
+
+function finish {
+    test -d "$d_scratch" && /bin/rm -rf "$d_scratch"
+}
+
+trap finish EXIT
+
+
+function parse_cli {
+    test -z "${1:-}" && usage
+
+    while getopts ":tghs2cSCl:m:n:b:d" o; do
+        case "${o}" in
+            h)
+                usage
+                ;;
+            b)
+                BLACK="$OPTARG"
+                ;;
+            n)
+                SH_CFG_NAME="$OPTARG"
+                ;;
+            d)
+                dry_mode=true;
+                ;;
+            g)
+                git_changed_only=true
+                ;;
+            S)
+                add_skips=true
+                mkdir -p "$(dirname "$fn_skips")"
+                touch "$fn_skips"
+                ;;
+            C)
+                echo "Clearing skiplist"
+                /bin/rm -f "$fn_skips"
+                ;;
+            m)
+                formatter_black_mode="$OPTARG"
+                ;;
+            l)
+                formatter_black_line_len="$OPTARG"
+                ;;
+            t)
+                toplevel=true
+                ;;
+            2)
+                formatter_black_target_version="py27"
+                ;;
+            c)
+                client=true
+                ;;
+            *)
+                usage 1
+                ;;
+        esac
+    done
+    shift $((OPTIND-1))
+    test -z "${2:-}" || die "Only give single dirs or files."
+    if [ "${1:-}" == "" ]
+    then
+        return 0 # we accpept no dir when there are switches. Its `pwd` then.
+    elif [ "$1" == "serve" ]
+    then
+        serve=true
+    elif [ "$1" == "ping" ]
+    then
+        ping=true
+    elif [ ! -e "$1" ]
+    then
+        die "Not found: $1"
+    fi
+}
+
+function start_server {
+    $serve || return 0
+    "$DIR/blackd" --bind-port $PORT
+    exit $?
+}
+
+function send {
+    local fnt body
+    fnt="$1"
+    body="$2"
+    curl  --fail -XPOST -s "localhost:$PORT"                    \
+         -H "X-Fast-Or-Safe: $formatter_black_mode"             \
+         -H "X-LINE-LENGTH: $formatter_black_line_len"          \
+         -H "X-Python-Variant: $formatter_black_target_version" \
+         --output "$fnt"                                        \
+         --create-dirs                                          \
+         -d "$body"
+    test "$?" == 0 && return 0
+    $add_skips && return 1
+    die "Syntax Error on source file. Try without -c then fix or consider -S."
+}
+
+
+function make_scratch_dir {
+    d_scratch=$(mktemp -d -t tmp.XXXXXXXXXX)
+}
+
+function format_file {
+    echo -e "Formatting: $M$1$O"
+    local fn fnt d
+    #fnt="$d_scratch/$(basename "$1")"
+    d="$(dirname "$1")"
+    d="$(cd "$d" && pwd)"
+    fn="$d/$(basename "$1")"
+    fnt="$d_scratch/$fn"
+    if [[ $client == true ]]
+    then
+        send "$fnt" "$(cat "$1")" || {
+            check_add_skips "$fn"
+            return 0
+        }
+        test -z "$(cat "$fnt" 2>/dev/null)" && {
+            echo "(unchanged)"
+            return 0
+        }
+        echo -e "${I}formatted$O"
+        mv "$fnt" "$1"
+    else
+        $dry_mode && {
+            echo "Dry Mode - setting file from $fn to /dev/null"
+            fn="/dev/null"
+            cmt="# was: $fn"
+            set -x
+        }
+        $BLACK \
+            -t "$formatter_black_target_version" \
+            -l "$formatter_black_line_len"       \
+            --"$formatter_black_mode"            \
+            "$fn"
+        local ret=$?
+        $dry_mode && { set +x; exit 0; }
+        test $ret == 0 || {
+                check_add_skips "$fn"
+                return 0
+        }
+    fi
+}
+
+function check_add_skips {
+    local fn; fn="$1"
+    grep "$fn" "$fn_skips" && {
+        echo -e "$R$fn$O is in skiplist - continuing."
+        return
+    }
+    echo "$fn" >> "$fn_skips"
+    die "Added to $fn_skips for next run: $R$fn$O"
+}
+
+function repo_root {
+    ( cd "$1" && git rev-parse --show-toplevel || die "Error in repo detection" )
+}
+
+
+function format_git_changed {
+    # finding staged and unstaged files and looping over them only
+    local fn rr
+    rr="$(repo_root "$D")"
+    fn="$d_scratch/git_changed"
+    eval "$git_ch1" >  "$fn"
+    eval "$git_ch2" >> "$fn"
+
+    while read -r p
+    do
+        if [[ "$rr/$p" == $D* ]]
+        then
+            format_file "$rr/$p"
+        fi
+    done <"$fn"
+}
+
+function format {
+    $serve && return 0
+    if [ "$ping"  == true ]
+    then
+        # simple hello world test for the server:
+        py='if 1: print("hello world")'
+        echo -e "Trying the server, sending '$py'\nResult:"
+        send "$d_scratch/hello.py" "$py"
+        cat "$d_scratch/hello.py"
+        exit
+    fi
+    if [ -z "$FN" ]
+    then
+        cd "$D" || die "Sorry"
+        $toplevel && {
+            D="$(repo_root "$D")"
+            echo -e "Starting at toplevel: $I$D$O"
+        }
+        $git_changed_only && {
+            format_git_changed
+            return $?
+        }
+        for f in $(find "$D" -print |grep .py$)
+        do
+            format_file "$f"
+        done
+    elif [ -f "$FN" ]
+    then
+        format_file "$FN"
+    else
+        die "Not a file: $FN"
+    fi
+}
+
+function main {
+    set_colors
+    parse_cli "$@"
+    make_scratch_dir
+    start_server
+    format
+}
+
+main "$@"
