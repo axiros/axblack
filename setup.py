@@ -45,7 +45,7 @@ else:
 
 setup(
     name="black",
-    version = "191128"
+    version = "191128",
     use_scm_version={
         "write_to_template": 'version = "{version}"\n',
     },
