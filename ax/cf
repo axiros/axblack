@@ -119,7 +119,7 @@ me="$(basename "$0")"
 dry_mode=false
 git_ch1="git diff --name-only --diff-filter=ACM --cached"
 git_ch2="git diff --name-only --diff-filter=ACM"
-
+example_with_config=''$me' -b "`which black` --config /tmp/pyproject.toml --diff"  myfile.py'
 
 # Now we can build the docstring with actual values:
 doc="Code Formatter. Wraps black (formats python files).
@@ -202,8 +202,7 @@ $me ping
 # Use server to format complete git repo:
 $me -ct
 # Supply args for black - note that some cli args are set by $me - use -d to see:
-$me -b "`which black` --config /tmp/pyproject.toml --diff"  myfile.py
-
+$example_with_config
 "
 
 function usage {
