@@ -39,7 +39,12 @@ def foo():
     m = {'a': 'b'}
 ```
 
-## Changelog
+<details><summary>Changelog</summary>
+
+[2019-11-24 11:21]  
+- Recreated repo as direct fork of psf/black, with adapted master branch for
+  easier future merges from them (and getting their newest improvements)
+
 [2019-11-23 21:16]  
 - Dropped the -s in favor of the long argument "double-quotes" - to never
   collide with any argument of theirs. Default for double-quotes: False
@@ -58,6 +63,7 @@ Initial version after:
 - Set `default=True` into black.py
 - Created axblack pip and pushed to pypi.
 
+</details>
 
 ## Installation
 
