@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 
-git commit -am 'pre pip push'
-git push
+echo "We do not commit or push"
+
+echo "you have to adapt the version in setup.py AND _black_version.py"
+
+#git commit -am 'pre pip push'
+# git push
 
 clean () {
     rm -rf ./dist
