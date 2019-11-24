@@ -45,7 +45,8 @@ else:
 
 setup(
     name="axblack",
-    version = "191128",
+    # change also _black_version.py:
+    version = "20191128",
     description="The uncompromising code formatter.",
     long_description=get_long_description(),
     long_description_content_type="text/markdown",
