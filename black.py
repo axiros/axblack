@@ -189,7 +189,7 @@ VERSION_TO_FEATURES: Dict[TargetVersion, Set[Feature]] = {
 class FileMode:
     target_versions: Set[TargetVersion] = field(default_factory=set)
     line_length: int = DEFAULT_LINE_LENGTH
-    single_quotes: bool = False
+    single_quotes: bool = True
     string_normalization: bool = True
     is_pyi: bool = False
 
