@@ -22,14 +22,14 @@ about single quotes, unfortunatelly.
 
 > We do hope they change their minds so this fork is not necessary any more.
 
-This version based on a [PR](https://github.com/psf/black/pull/1003) fixing
-this.
 
 ## Deviations
 
 ### Single Quotes
 
-Single quotes are default
+Single quotes are default.
+
+Patch is based on this [PR](https://github.com/psf/black/pull/1003).
 
 
 ### Configured Excludes Always Respected
@@ -37,18 +37,17 @@ Single quotes are default
 When you explitely specify excludes in a toml file, then we respect them
 *always* - even if a file is given on the CLI.
 
-This is basically [this](https://github.com/psf/black/pull/1032/files) patch,
-adapted to the current version of black, with the gitignore feature.
+#### Rationale:
 
-Rationale: 
-
-Consider this pre-commit hook, which verifies correct formatting of
-a dynamically built list of files:
+The list of files to be formatted are often *dynamically* built, e.g.:
 
     black `git diff --name-only --diff-filter=ACM`
 
 We must in such cases still respect the exclude list, even if files had been changed
 (e.g. from ZODB dumps).
+
+Patch is based on this [PR](https://github.com/psf/black/pull/1032).
+
 
 
 ## axblack - Default Style
