@@ -465,7 +465,12 @@ def main(
             )
         elif p.is_file() or s == "-":
             # if a file was explicitly given, we don't care about its extension
-            sources.add(p)
+            #sources.add(p)
+            # if a file was explicitly given, we bypass include
+            sources.update(
+                gen_python_files([p], root, include=None, exclude=exclude_regex, \
+                        report=report, gitignore=get_gitignore(root))
+            )
         else:
             err(f"invalid path: {s}")
     if len(sources) == 0:
@@ -3530,10 +3535,10 @@ def get_gitignore(root: Path) -> PathSpec:
     return PathSpec.from_lines("gitwildmatch", lines)
 
 
-def gen_python_files_in_dir(
-    path: Path,
+def gen_python_files(
+    paths: Iterable[Path],
     root: Path,
-    include: Pattern[str],
+    include: Optional[Pattern[str]],
     exclude: Pattern[str],
     report: "Report",
     gitignore: PathSpec,
@@ -3546,7 +3551,7 @@ def gen_python_files_in_dir(
     `report` is where output about exclusions goes.
     """
     assert root.is_absolute(), f"INTERNAL ERROR: `root` must be absolute but is {root}"
-    for child in path.iterdir():
+    for child in paths:
         # First ignore files matching .gitignore
         if gitignore.match_file(child.as_posix()):
             report.path_ignored(child, f"matches the .gitignore file content")
@@ -3582,9 +3587,23 @@ def gen_python_files_in_dir(
             )
 
         elif child.is_file():
-            include_match = include.search(normalized_path)
-            if include_match:
+            #include_match = include.search(normalized_path)
+            #if include_match:
+            #    yield child
+            # if an include regex is not provided, the file is included
+            if not include or include.search(normalized_path):
                 yield child
+
+
+def gen_python_files_in_dir(
+    path: Path,
+    root: Path,
+    include: Optional[Pattern[str]],
+    exclude: Pattern[str],
+    report: "Report",
+    gitignore: PathSpec,
+) -> Iterator[Path]:
+    return gen_python_files(path.iterdir(), root, include, exclude, report, gitignore)
 
 
 @lru_cache()

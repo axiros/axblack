@@ -14,7 +14,6 @@
 > “Any color you like.”
 
 ---
-
 ...as long as it has single quotes.
 
 This is an alternative to the official [black](https://github.com/psf/black) formatter,
@@ -24,7 +23,33 @@ about single quotes, unfortunatelly.
 > We do hope they change their minds so this fork is not necessary any more.
 
 This version based on a [PR](https://github.com/psf/black/pull/1003) fixing
-this. Morevover we made single quotes even default.
+this.
+
+## Deviations
+
+### Single Quotes
+
+Single quotes are default
+
+
+### Configured Excludes Always Respected
+
+When you explitely specify excludes in a toml file, then we respect them
+*always* - even if a file is given on the CLI.
+
+This is basically [this](https://github.com/psf/black/pull/1032/files) patch,
+adapted to the current version of black, with the gitignore feature.
+
+Rationale: 
+
+Consider this pre-commit hook, which verifies correct formatting of
+a dynamically built list of files:
+
+    black `git diff --name-only --diff-filter=ACM`
+
+We must in such cases still respect the exclude list, even if files had been changed
+(e.g. from ZODB dumps).
+
 
 ## axblack - Default Style
 
@@ -46,7 +71,16 @@ only way to get them.
 Should you prefer them for private projects or find them in project policies, by any means, use the
 official black version then.
 
+Q: Why not rename black into axblack to allow coexistance?  
+A: Because black is supported by [many](https://github.com/dense-analysis/ale/blob/master/doc/ale-python.txt
+) tools, which rely on that name. Meaning you need seperate python
+environments in order to use both on one host. 
+
 <details><summary>Changelog</summary>
+
+[2019-12-12 12:57] 
+- Changed the exclude behaviour: When exclude given in .toml file we *always*
+  respect it - even if a file is excplitely given on CLI for formats.
 
 [2019-11-24 11:21]  
 - Set single_quotes as default in black.py `class File`, so that it works also
@@ -135,10 +169,13 @@ shown below and adapt the exclude directories according to your needs.
 <details>
 <summary>Example `pyproject.toml`</summary>
 
+Add a note for using axblack to avoid confusion:
+
 ```toml
 [tool.black]
+# using pip install axblack for single_quotes
 line-length = 88
-target-version = ['py37']
+target-version = ['py27']
 include = '\.pyi?$'
 exclude = '''
 
@@ -154,8 +191,7 @@ exclude = '''
     | build
     | dist
   )/
-  | foo.py           # also separately exclude a file named foo.py in
-                     # the root of the project
+  | (.*)/foo.py      # also separately exclude a files named foo.py
 )
 '''
 ```
