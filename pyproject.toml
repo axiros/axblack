@@ -6,6 +6,7 @@
 # character.
 
 [tool.black]
+double-quotes = 'true'
 line-length = 88
 target-version = ['py36', 'py37', 'py38']
 include = '\.pyi?$'

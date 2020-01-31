@@ -48,7 +48,12 @@ We must in such cases still respect the exclude list, even if files had been cha
 
 Patch is based on this [PR](https://github.com/psf/black/pull/1032).
 
+### Project root kept at path of pyproject.toml
 
+When you configure explicitely (via `--config`) a pyproject.toml file, then
+its path will fix the project root, relevant for regex matching the
+excludes (see above). Otherwise black would reset the project root per passed
+file, which is a problem when it finds e.g. subrepos' .git or .hg folders. 
 
 ## axblack - Default Style
 

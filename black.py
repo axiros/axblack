@@ -272,11 +272,8 @@ def target_version_option_callback(
     help="How many characters per line to allow.",
     show_default=True,
 )
+@click.option("--double-quotes", is_flag=True, help="Set the prefered quote style.")
 @click.option(
-    "--double-quotes", is_flag=True, help="Set the prefered quote style."
-)
-@click.option(
-
     "-t",
     "--target-version",
     type=click.Choice([v.name.lower() for v in TargetVersion]),
@@ -452,7 +449,10 @@ def main(
         err(f"Invalid regular expression for exclude given: {exclude!r}")
         ctx.exit(2)
     report = Report(check=check, quiet=quiet, verbose=verbose)
-    root = find_project_root(src)
+    if config:
+        root = Path(os.path.dirname(config))
+    else:
+        root = find_project_root(src)
     sources: Set[Path] = set()
     path_empty(src, quiet, verbose, ctx)
     for s in src:
@@ -465,11 +465,17 @@ def main(
             )
         elif p.is_file() or s == "-":
             # if a file was explicitly given, we don't care about its extension
-            #sources.add(p)
+            # sources.add(p)
             # if a file was explicitly given, we bypass include
             sources.update(
-                gen_python_files([p], root, include=None, exclude=exclude_regex, \
-                        report=report, gitignore=get_gitignore(root))
+                gen_python_files(
+                    [p],
+                    root,
+                    include=None,
+                    exclude=exclude_regex,
+                    report=report,
+                    gitignore=get_gitignore(root),
+                )
             )
         else:
             err(f"invalid path: {s}")
@@ -3587,8 +3593,8 @@ def gen_python_files(
             )
 
         elif child.is_file():
-            #include_match = include.search(normalized_path)
-            #if include_match:
+            # include_match = include.search(normalized_path)
+            # if include_match:
             #    yield child
             # if an include regex is not provided, the file is included
             if not include or include.search(normalized_path):
