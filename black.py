@@ -465,18 +465,20 @@ def main(
             )
         elif p.is_file() or s == "-":
             # if a file was explicitly given, we don't care about its extension
-            # sources.add(p)
-            # if a file was explicitly given, we bypass include
-            sources.update(
-                gen_python_files(
-                    [p],
-                    root,
-                    include=None,
-                    exclude=exclude_regex,
-                    report=report,
-                    gitignore=get_gitignore(root),
+            if s == "-":
+                sources.add(p)
+            else:
+                # if a file was explicitly given, we bypass include
+                sources.update(
+                    gen_python_files(
+                        [p],
+                        root,
+                        include=None,
+                        exclude=exclude_regex,
+                        report=report,
+                        gitignore=get_gitignore(root),
+                    )
                 )
-            )
         else:
             err(f"invalid path: {s}")
     if len(sources) == 0:
