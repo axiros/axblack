@@ -46,7 +46,7 @@ else:
 setup(
     name='axblack',
     # change also _black_version.py:
-    version='20200802',
+    version='20200803',
     description='The uncompromising code formatter - with single quotes as default.',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',
