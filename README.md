@@ -31,7 +31,6 @@ Single quotes are default.
 
 Patch is based on this [PR](https://github.com/psf/black/pull/1003).
 
-
 ### Configured Excludes Always Respected
 
 When you explitely specify excludes in a toml file, then we respect them
@@ -55,6 +54,12 @@ its path will fix the project root, relevant for regex matching the
 excludes (see above). Otherwise black would reset the project root per passed
 file, which is a problem when it finds e.g. subrepos' .git or .hg folders. 
 
+
+### Different Versioning
+
+See [here](https://github.com/microsoft/vscode-python/issues/5171) regarding
+why...
+
 ## axblack - Default Style
 
 ```python
@@ -65,6 +70,11 @@ Module doc
 def foo():
     """func doc"""    # double quotes for docstrings
     s = 'hello world' # single quotes for code
+    stmt = '''         
+        SELECT *
+        FROM foo
+        WHERE bar;
+    '''
     m = {'a': 'b'}
 ```
 
@@ -81,6 +91,9 @@ A: Because black is supported by [many](https://github.com/dense-analysis/ale/bl
 environments in order to use both on one host. 
 
 <details><summary>Changelog</summary>
+[2020-10-09 19:31] 
+- Changed the triple quote behaviour (keep them only in simple statements like
+  docstrings but not assignments). See https://github.com/axiros/axblack/issues/6
 
 [2019-12-12 12:57] 
 - Changed the exclude behaviour: When exclude given in .toml file we *always*

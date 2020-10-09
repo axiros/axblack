@@ -2873,12 +2873,19 @@ def normalize_string_quotes(leaf: Leaf, single_quotes: bool = False) -> None:
     Note: Mutates its argument.
     """
     value = leaf.value.lstrip("furbFURB")
-    if value[:3] == '"""':
-        return
 
+    if value[:3] == '"""':
+        # https://github.com/axiros/axblack/issues/6
+        if leaf.parent.type == syms.simple_stmt:
+            return
+        orig_quote = '"""'
+        new_quote = "'''"
     elif value[:3] == "'''":
-        orig_quote = "'''"
-        new_quote = '"""'
+        if leaf.parent.type == syms.simple_stmt:
+            orig_quote = "'''"
+            new_quote = '"""'
+        else:
+            return
     elif value[0] == '"':
         orig_quote = '"'
         new_quote = "'"
