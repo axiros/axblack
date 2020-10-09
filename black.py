@@ -2873,19 +2873,30 @@ def normalize_string_quotes(leaf: Leaf, single_quotes: bool = False) -> None:
     Note: Mutates its argument.
     """
     value = leaf.value.lstrip("furbFURB")
-
-    if value[:3] == '"""':
-        # https://github.com/axiros/axblack/issues/6
-        if leaf.parent.type == syms.simple_stmt:
-            return
-        orig_quote = '"""'
-        new_quote = "'''"
-    elif value[:3] == "'''":
-        if leaf.parent.type == syms.simple_stmt:
-            orig_quote = "'''"
-            new_quote = '"""'
+    d3 = '"""'
+    s3 = "'''"
+    if value[:3] in [d3, s3]:
+        if not single_quotes:
+            # keep the original behaviour: dbl always:
+            if value[:3] == d3:
+                return
+            elif value[:3] == s3:
+                orig_quote = s3
+                new_quote = d3
         else:
-            return
+            # differentiate if docstring or not:
+            if value[:3] == d3:
+                # https://github.com/axiros/axblack/issues/6
+                if leaf.parent.type == syms.simple_stmt or not single_quotes:
+                    return
+                orig_quote = d3
+                new_quote = s3
+            elif value[:3] == s3:
+                if leaf.parent.type == syms.simple_stmt or not single_quotes:
+                    orig_quote = s3
+                    new_quote = d3
+                else:
+                    return
     elif value[0] == '"':
         orig_quote = '"'
         new_quote = "'"
