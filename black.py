@@ -2887,12 +2887,12 @@ def normalize_string_quotes(leaf: Leaf, single_quotes: bool = False) -> None:
             # differentiate if docstring or not:
             if value[:3] == d3:
                 # https://github.com/axiros/axblack/issues/6
-                if leaf.parent.type == syms.simple_stmt or not single_quotes:
+                if leaf.parent.type == syms.simple_stmt:
                     return
                 orig_quote = d3
                 new_quote = s3
             elif value[:3] == s3:
-                if leaf.parent.type == syms.simple_stmt or not single_quotes:
+                if leaf.parent.type == syms.simple_stmt:
                     orig_quote = s3
                     new_quote = d3
                 else:
