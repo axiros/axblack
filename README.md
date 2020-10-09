@@ -1,6 +1,5 @@
 ![Black Logo](https://raw.githubusercontent.com/axiros/axblack/master/docs/_static/logoax-readme.png)
-<h2 align="center">The Uncompromising Code Formatter</h2>
-<i>(compromised version)</i>
+<h2 align="center">The Uncompromising Code Formatter<i> (compromised version)</i></h2>
 
 <p align="center">
 <a href="https://github.com/psf/black/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
