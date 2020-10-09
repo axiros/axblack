@@ -1,5 +1,6 @@
-![Black Logo](https://raw.githubusercontent.com/psf/black/master/docs/_static/logo2-readme.png)
+![Black Logo](https://raw.githubusercontent.com/axiros/axblack/master/docs/_static/logoax-readme.png)
 <h2 align="center">The Uncompromising Code Formatter</h2>
+<i>(compromised version)</i>
 
 <p align="center">
 <a href="https://github.com/psf/black/blob/master/LICENSE"><img alt="License: MIT" src="https://black.readthedocs.io/en/stable/_static/license.svg"></a>
@@ -35,11 +36,13 @@ def foo():
 
 
 This is an alternative to the official [black](https://github.com/psf/black) formatter,
-which is letting line len configurable but (too?) [strict](https://github.com/psf/black/issues/118)
-about single quotes, unfortunatelly.
+which (too?) [strict](https://github.com/psf/black/issues/118) about single quotes, unfortunatelly.
 
 > We do hope they change their minds so this fork is not necessary any more.
 
+Note: The argument that one unified style **would** be superbeneficial for
+the whole community we do share - BUT: While line length **is** still configurable that goal 
+cannot be reached anyway, even with opinionated fixed quoting style.
 
 ## Deviations
 
