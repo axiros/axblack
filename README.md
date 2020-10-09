@@ -75,8 +75,14 @@ file, which is a problem when it finds e.g. subrepos' .git or .hg folders.
 
 ### Different Versioning
 
-See [here](https://github.com/microsoft/vscode-python/issues/5171) regarding
-why...
+No pre-release foo.
+
+- [here](https://github.com/psf/black/issues/209)
+- [here](https://github.com/microsoft/vscode-python/issues/5171)
+- [here](https://github.com/microsoft/vscode-python/issues/5756)
+- [here](https://github.com/psf/black/issues/517)
+
+regarding why.
 
 # Notes
 
