@@ -34,8 +34,8 @@ def foo():
 
 
 
-This is an alternative to the official [black](https://github.com/psf/black) formatter,
-which (too?) [strict](https://github.com/psf/black/issues/118) about single quotes, unfortunatelly.
+This is a forked alternative to the official [black](https://github.com/psf/black) formatter,
+which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issues/118) about single quotes, unfortunatelly.
 
 > We do hope they change their minds so this fork is not necessary any more.
 
