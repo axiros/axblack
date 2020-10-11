@@ -8,10 +8,7 @@
 <a href="https://github.com/psf/black"><img alt="Code style: black" src="https://img.shields.io/badge/code%20style-axblack-8bd124.svg"></a>
 </p>
 
-> “Any color you like.”
-
----
-...as long as it is **`'`**black**`'`**.
+## ...as long as it's **`'black'`**
 
 
 # axblack - Default Style
