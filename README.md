@@ -11,7 +11,7 @@
 > “Any color you like.”
 
 ---
-...as long as it is **'**black**'**.
+<p>...as long as it is <b><font color="#8bd124">'</font></b>black<b><font color="#8bd124">'</font></b>.
 
 
 # axblack - Default Style
