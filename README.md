@@ -11,7 +11,7 @@
 > “Any color you like.”
 
 ---
-...as long as it has single quotes.
+...as long as it is **'**black**'**.
 
 
 # axblack - Default Style
