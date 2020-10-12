@@ -13,9 +13,13 @@
 
 # axblack - Default Style
 
+<table>
+<tbody><tr><td>
+
 ```python
+
 """
-Module doc
+Module doc axblack style formatted
 """
 
 def foo():
@@ -28,7 +32,25 @@ def foo():
     '''
     m = {'a': 'b'}
 ```
+</td><td>
 
+```python
+"""
+Module doc - psf/black formatted
+"""
+
+def foo():
+    """func doc"""    
+    s = "hello world"
+    stmt = """
+        SELECT *
+        FROM foo
+        WHERE bar;
+    """
+    m = {"a": "b"}
+```
+
+</td></tr></tbody></table>
 
 
 This is a forked alternative to the official [black](https://github.com/psf/black) formatter,
