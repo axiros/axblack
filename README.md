@@ -32,9 +32,9 @@ def foo():
 
 
 This is a forked alternative to the official [black](https://github.com/psf/black) formatter,
-which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issues/118) about single quotes, unfortunatelly.
+which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issues/118) about single quotes, ([very](https://github.com/psf/black/issues/51)) unfortunatelly.
 
-> We do hope they change their minds so this fork is not necessary any more.
+> We we are sure they'll change their minds one day, so this fork is not necessary any more - it is a workaround to bridge that time gap.
 
 Note: The argument that one unified style **would** be superbeneficial for
 the whole community we do share - BUT: While line length **is** still configurable that goal 
@@ -62,7 +62,6 @@ The list of files to be formatted are often *dynamically* built, e.g.:
 We must in such cases still respect the exclude list, even if files had been changed
 (e.g. from ZODB dumps).
 
-Patch is based on this [PR](https://github.com/psf/black/pull/1032).
 
 ### Project root kept at path of pyproject.toml
 
@@ -82,6 +81,11 @@ No pre-release foo.
 - [here](https://github.com/psf/black/issues/517)
 
 regarding why.
+
+We leave the calver style versioning scheme, but w/o dots, to indicate that this is not a "real" project.
+
+> Yes this is [PEP-440](https://www.python.org/dev/peps/pep-0440/) compatible.
+> And yes, we (meanwhile) know that [pipenv](https://chriswarrick.com/blog/2018/07/17/pipenv-promises-a-lot-delivers-very-little/) has a problem with such versions and `^`. Here you have to pin it.
 
 # Notes
 
