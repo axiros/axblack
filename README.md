@@ -36,9 +36,15 @@ which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issue
 
 > We we are sure they'll change their minds one day, so this fork is not necessary any more - it is a workaround to bridge that time gap.
 
-Note: The argument that one unified style **would** be superbeneficial for
+## Background
+
+1. The argument that one unified style **would** be superbeneficial for
 the whole community we do share - BUT: While line length **is** still configurable that goal 
 cannot be reached anyway, even with opinionated fixed quoting style.
+
+2. The reason why the black author [changed his mind](https://github.com/psf/black/issues/51#issuecomment-375722810_) away from using single quotes: [pull request/75](https://github.com/psf/black/pull/75#issuecomment-376203386_) was this example: `{MESSAGE.two: "Please don't look over there."}`. We ~~don't~~ do not think, that this example is justifying the strict rejection of the idea of making quoting style even configurable. 
+
+
 
 ## Deviations
 
@@ -97,9 +103,23 @@ only way to get them.
 Should you prefer them for private projects or find them in project policies, by any means, use the official black version then. 
 
 Q: Why not rename black into axblack to allow coexistance?  
-A: Because black is supported by [many](https://github.com/dense-analysis/ale/blob/master/doc/ale-python.txt
+A: Because black is builtin-supported by [many](https://github.com/dense-analysis/ale/blob/master/doc/ale-python.txt
 ) tools, which rely on that name. Meaning you need seperate python
-environments in order to use both on one host. 
+environments in order to use both on one host.
+
+Tip: When a tool has a dependency on the official version than nail it to
+ `18.6b4`, e.g. in pyproject.toml:
+
+```toml
+[tool.poetry.dev-dependencies]
+autoflake = "^1.4"
+axblack = "^20201010"
+black = "18.6b4"
+```
+
+Since axblack still is installed into site-packges directly, while newer
+version of black are in a subfolder there.
+
 
 <details><summary>Changelog</summary>
 [2020-10-09 19:31] 
