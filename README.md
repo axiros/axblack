@@ -58,15 +58,22 @@ which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issue
 
 > We we are sure they'll change their minds one day, so this fork is not necessary any more - it is a workaround to bridge that time gap.
 
+Note: There are other forks as well, with yet more features, e.g. [oitnb](https://pypi.org/project/oitnb/) - orange is the new black.
+
+
 ## Background
 
 1. The argument that one unified style **would** be superbeneficial for
-the whole community we do share - BUT: While line length **is** still configurable that goal 
-cannot be reached anyway, even with opinionated fixed quoting style.
+the whole community we do share - BUT: While line length **is** still configurable that goal cannot be reached anyway, even with opinionated fixed quoting style.
 
 2. The reason why the black author [changed his mind](https://github.com/psf/black/issues/51#issuecomment-375722810_) away from using single quotes: [pull request/75](https://github.com/psf/black/pull/75#issuecomment-376203386_) was this example: `{MESSAGE.two: "Please don't look over there."}`. We ~~don't~~ do not think, that this example is justifying the strict rejection of the idea of making quoting style even configurable. 
 
+3. You are not alone if you prefer single quotes:
 
+> [If you use single-quotes for your strings you are in good company: “People use to really love double quotes. I don’t know why.. ](https://www.youtube.com/watch?v=wf-BqAjZb8M&feature=youtu.be&t=1081)
+
+
+![https://black.readthedocs.io/en/stable/_static/ht_tw.png](https://twitter.com/raymondh/status/1259209765072154624)
 
 ## Deviations
 
