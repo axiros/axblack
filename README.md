@@ -72,8 +72,7 @@ the whole community we do share - BUT: While line length **is** still configurab
 
 > [If you use single-quotes for your strings you are in good company: “People use to really love double quotes. I don’t know why.. ](https://www.youtube.com/watch?v=wf-BqAjZb8M&feature=youtu.be&t=1081)
 
-
-![https://black.readthedocs.io/en/stable/_static/ht_tw.png](https://twitter.com/raymondh/status/1259209765072154624)
+![https://raw.githubusercontent.com/axiros/axblack/master/docs/_static/ht_tw.png](https://twitter.com/raymondh/status/1259209765072154624)
 
 ## Deviations
 
