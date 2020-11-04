@@ -31,6 +31,10 @@ def foo():
         WHERE bar;
     '''
     m = {'a': 'b'}
+
+# trailing comma & short line: no line break:
+print(42,)  
+
 ```
 </td><td>
 
@@ -48,6 +52,11 @@ def foo():
         WHERE bar;
     """
     m = {"a": "b"}
+
+# trailing comma => line break *always*
+print(
+    42,
+)
 ```
 
 </td></tr></tbody></table>
@@ -60,11 +69,14 @@ which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issue
 
 Note: There are other forks as well, with yet more features, e.g. [oitnb](https://pypi.org/project/oitnb/) - orange is the new black.
 
+*This* fork is based on [this](https://github.com/psf/black/tree/fb1ac6981257c91a1d3bf753d10e1091f05b001a) psf/black version (2019-11-23). We will not merge in all code restructurings done in 2020. 
+
+
 
 ## Background
 
 1. The argument that one unified style **would** be superbeneficial for
-the whole community we do share - BUT: While line length **is** still configurable that goal cannot be reached anyway, even with opinionated fixed quoting style.
+the whole community we do share - BUT: While line length **is** still configurable that goal cannot be reached anyway, even with opinionated fixed quoting style. Also with the new (since 20.x?) 'line wrap at trailing comma feature' they actually allow a lot of individual 'creative freedom', regarding how code looks.
 
 2. The reason why the black author [changed his mind](https://github.com/psf/black/issues/51#issuecomment-375722810_) away from using single quotes: [pull request/75](https://github.com/psf/black/pull/75#issuecomment-376203386_) was this example: `{MESSAGE.two: "Please don't look over there."}`. We ~~don't~~ do not think, that this example is justifying the strict rejection of the idea of making quoting style even configurable. 
 
@@ -73,6 +85,11 @@ the whole community we do share - BUT: While line length **is** still configurab
 > [If you use single-quotes for your strings you are in good company: “People use to really love double quotes. I don’t know why.. ](https://www.youtube.com/watch?v=wf-BqAjZb8M&feature=youtu.be&t=1081)
 
 [![](https://raw.githubusercontent.com/axiros/axblack/master/docs/_static/ht_tw.png)](https://twitter.com/raymondh/status/1259209765072154624)
+
+```python
+>>> """"""'what do you  prefer'""""""
+'what do you  prefer'
+```
 
 ## Deviations
 
