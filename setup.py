@@ -1,10 +1,11 @@
 # Copyright (C) 2018 Łukasz Langa
-from setuptools import setup
-import sys
 import os
+import sys
+from pathlib import Path  # noqa E402
+
+from setuptools import setup
 
 assert sys.version_info >= (3, 6, 0), 'black requires Python 3.6+'
-from pathlib import Path  # noqa E402
 
 CURRENT_DIR = Path(__file__).parent
 sys.path.insert(0, str(CURRENT_DIR))  # for setuptools.build_meta
@@ -46,7 +47,7 @@ else:
 setup(
     name='axblack',
     # change also _black_version.py:
-    version='20201112',
+    version='20210720'
     description='The uncompromising code formatter (compromised version)',
     long_description=get_long_description(),
     long_description_content_type='text/markdown',

@@ -61,6 +61,9 @@ print(
 
 </td></tr></tbody></table>
 
+Also, this older version of black seems *not* to [change the AST](https://github.com/psf/black/issues/2150).
+
+----
 
 This is a forked alternative to the official [black](https://github.com/psf/black) formatter,
 which is a wonderful tool but (too?) [strict](https://github.com/psf/black/issues/118) about single quotes, ([very](https://github.com/psf/black/issues/51)) unfortunatelly.
