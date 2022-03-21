@@ -74,6 +74,10 @@ Note: There are other forks as well, with yet more features, e.g. [oitnb](https:
 
 *This* fork is based on [this](https://github.com/psf/black/tree/fb1ac6981257c91a1d3bf753d10e1091f05b001a) psf/black version (2019-11-23). We will not merge in all code restructurings done in 2020. 
 
+## Performance
+
+This is based on a python only version of black. Meanwhile they compile it to C, gaining some 25-30% performance, compared to axblack.
+
 
 
 ## Background
