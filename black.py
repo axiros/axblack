@@ -263,7 +263,7 @@ def target_version_option_callback(
 
 
 @click.command(context_settings=dict(help_option_names=["-h", "--help"]))
-@click.option("--stdin_filename", type=str, help="No Op. Just present for CLI compat with PSF black.")
+@click.option("--stdin-filename", type=str, help="No Op. Just present for CLI compat with PSF black.")
 @click.option("-c", "--code", type=str, help="Format the code passed in as a string.")
 @click.option(
     "-l",

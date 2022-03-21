@@ -174,6 +174,9 @@ version of black are in a subfolder there.
 
 
 <details><summary>Changelog</summary>
+[ 2022-03-21 14:47 ] 
+- Added an unprocessed `--stdin-filename` CLI switch, since some LSP servers (e.g. null-ls) send it
+
 [2020-10-09 19:31] 
 - Changed the triple quote behaviour (keep them only in simple statements like
   docstrings but not assignments). See https://github.com/axiros/axblack/issues/6
