@@ -77,6 +77,11 @@ Note: There are other forks as well, with yet more features, e.g. [oitnb](https:
 ## Performance
 
 This is based on a python only version of black. Meanwhile they compile it to C, gaining some 25-30% performance, compared to axblack.
+You'll notice a difference only at huge file sizes.
+
+Tip: Configure your code formatter to run [async][lfn] at file save.
+
+[lfn]: https://github.com/lukas-reineke/lsp-format.nvim
 
 
 
@@ -174,35 +179,44 @@ version of black are in a subfolder there.
 
 
 <details><summary>Changelog</summary>
-[ 2022-03-21 14:47 ] 
+
+[ 2022-03-21 14:47] 
+
 - Added an unprocessed `--stdin-filename` CLI switch, since some LSP servers (e.g. null-ls) send it
 
 [2020-10-09 19:31] 
+
 - Changed the triple quote behaviour (keep them only in simple statements like
   docstrings but not assignments). See https://github.com/axiros/axblack/issues/6
 
 [2019-12-12 12:57] 
+
 - Changed the exclude behaviour: When exclude given in .toml file we *always*
   respect it - even if a file is excplitely given on CLI for formats.
 
 [2019-11-24 11:21]  
+
 - Set single_quotes as default in black.py `class File`, so that it works also
   in vim.
 
 [2019-11-24 11:21]  
+
 - Recreated repo as direct fork of psf/black, with adapted master branch for
   easier future merges from them (and getting their newest improvements)
 
 [2019-11-23 21:16]  
+
 - Dropped the -s in favor of the long argument "double-quotes" - to never
   collide with any argument of theirs. Default for double-quotes: False
 - Bugfixed the parsing of single-quotes
 - Added the [cf](./ax/cf) tool.
 
 [2019-11-23 18:05]   
+
 - Added more README (Usage)
 
 [2019-11-23 15:05]   
+
 Initial version after:
 
 - `git clone https://github.com/mark-riley/black.git axblack`
