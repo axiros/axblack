@@ -180,6 +180,11 @@ version of black are in a subfolder there.
 
 <details><summary>Changelog</summary>
 
+[2022-03-30 13:33] 
+
+- Removed the `_unicodefun` patching of click (https://github.com/axiros/axblack/issues/16)
+
+
 [ 2022-03-21 14:47] 
 
 - Added an unprocessed `--stdin-filename` CLI switch, since some LSP servers (e.g. null-ls) send it
