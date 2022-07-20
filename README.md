@@ -10,6 +10,15 @@
 
 ## ...as long as it's **`'black'`**
 
+**Notice** (2022-07-20): We would like to forward the user interested in single quoted python
+formatting to the [blue](https://github.com/grantjenks/blue) project.
+
+It is closer to the default black formatter and comes with supporting tools like a [null_ls builtin](https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#blue) for
+neovim. Biggest deviation to axblack style is double apostrophes for any multiline string (not only
+docstrings).
+
+Given the existence of blue, axblack will only see bug fixes at this point of time.
+
 
 # axblack - Default Style
 
