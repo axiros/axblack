@@ -10,11 +10,32 @@
 
 ## ...as long as it's **`'black'`**
 
-**Notice** (2023-10-10): One tool to rule them all - **`ruff format`** is the new star.
+----
 
-While blue's performance could not keep up with black's recently, sometimes 30% slower, this one literally dusts everybody: 
+**Notice** (2023-10-10): One tool to rule them all - [**`ruff [format]`**](https://github.com/astral-sh/ruff) is the new star, imho.
+
+While blue's performance could not keep up with black's recently, sometimes 30% slower, this one literally dusts everybody:
 
 ![](https://preview.redd.it/lde7znupi7ob1.png?width=927&format=png&auto=webp&s=122c453063dfe270c66bc4501f4ef633c465f02c)
+
+Plus, it does not try to make python look the same everywhere (as black does but which
+cannot be reached anyway when something as critical to looks as line_length is arbitrary).
+
+Ruff puts you into full control:
+
+```toml
+[tool.ruff]
+line-length = 90
+
+[tool.ruff.flake8-quotes]
+docstring-quotes = "double"
+inline-quotes = "single"
+
+[tool.ruff.format]
+# Prefer single quotes over double quotes
+quote-style = "single"
+```
+
 
 Maturity: As of 2023-10, You still get a warning about experimental state of the formatter in ruff. I can say that
 I (and [others](https://www.reddit.com/r/Python/comments/16ig4wu/ruff_format_new_tool_to_format_python_files_that/)) did not run into any problems, even on larger code bases. 
@@ -23,17 +44,29 @@ So, I would not yet (! - see below) recommend to use untested for production. Bu
 > The goal is to enable users to replace Black with Ruff. So, ideally, new projects could come in and replace pyflakes, pycodestyle, isort, and black with a single tool (Ruff).
 https://github.com/astral-sh/ruff/issues/1904
 
-```toml
-[tool.ruff]
-line-length = 90
+Using lazy vim? This is a working config, having ruff within your path:
 
-[tool.ruff.format]
-# Prefer single quotes over double quotes
-quote-style = "single"
+```lua
+return {
+  {
+    "stevearc/conform.nvim",
+    opts = {
+      formatters_by_ft = {
+        -- Conform will run multiple formatters sequentially
+        python = { "ruff_fix", "ruff_format" },
+        -- Use a sub-list to run only the first available formatter
+        javascript = { { "prettierd", "prettier" } },
+      },
+    },
+  },
+}
 ```
 
+Note: Don't get afraid when running this on the format examples below, realizing all the
+assignments are gone after a format run - this is simply ruff_fix at work :-)
 
 
+----
 
 **Notice** (2022-07-20): We would like to forward the user interested in single quoted python
 formatting to the [blue](https://github.com/grantjenks/blue) project.
