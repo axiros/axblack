@@ -14,7 +14,7 @@
 
 While blue's performance could not keep up with black's recently, sometimes 30% slower, this one literally dusts everybody: 
 
-https://preview.redd.it/lde7znupi7ob1.png?width=927&format=png&auto=webp&s=122c453063dfe270c66bc4501f4ef633c465f02c
+![](https://preview.redd.it/lde7znupi7ob1.png?width=927&format=png&auto=webp&s=122c453063dfe270c66bc4501f4ef633c465f02c)
 
 Maturity: As of 2023-10, You still get a warning about experimental state of the formatter in ruff. I can say that
 I (and [others](https://www.reddit.com/r/Python/comments/16ig4wu/ruff_format_new_tool_to_format_python_files_that/)) did not run into any problems, even on larger code bases. 
