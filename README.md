@@ -10,6 +10,31 @@
 
 ## ...as long as it's **`'black'`**
 
+**Notice** (2023-10-10): One tool to rule them all - **`ruff format`** is the new star.
+
+While blue's performance could not keep up with black's recently, sometimes 30% slower, this one literally dusts everybody: 
+
+https://preview.redd.it/lde7znupi7ob1.png?width=927&format=png&auto=webp&s=122c453063dfe270c66bc4501f4ef633c465f02c
+
+Maturity: As of 2023-10, You still get a warning about experimental state of the formatter in ruff. I can say that
+I (and [others](https://www.reddit.com/r/Python/comments/16ig4wu/ruff_format_new_tool_to_format_python_files_that/)) did not run into any problems, even on larger code bases. 
+So, I would not yet (! - see below) recommend to use untested for production. But for your local editor the tool rocks - not only as formatter but it replaces everything:
+
+> The goal is to enable users to replace Black with Ruff. So, ideally, new projects could come in and replace pyflakes, pycodestyle, isort, and black with a single tool (Ruff).
+https://github.com/astral-sh/ruff/issues/1904
+
+```toml
+[tool.ruff]
+line-length = 90
+
+[tool.ruff.format]
+# Prefer single quotes over double quotes
+quote-style = "single"
+```
+
+
+
+
 **Notice** (2022-07-20): We would like to forward the user interested in single quoted python
 formatting to the [blue](https://github.com/grantjenks/blue) project.
 
